@@ -6,5 +6,3 @@ export type Rover = {
   position: [number, number];
   direction: Direction;
 };
-
-export type MarsGrid = [[0, 0], [number, number]];
