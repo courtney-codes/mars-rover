@@ -6,7 +6,7 @@ describe('createRover() function', () => {
     const rover = createRover(1, 3, 'N');
 
     expect(rover).toEqual({
-      position: [1, 3],
+      position: {x: 1, y: 3},
       direction: 'N',
     });
   });
@@ -14,13 +14,13 @@ describe('createRover() function', () => {
 
 describe('moveRover() function', () => {
   it.each([
-    [[1, 1], [1, 2], 'N'],
-    [[1, 1], [1, 0], 'S'],
-    [[2, 1], [3, 1], 'E'],
-    [[2, 1], [1, 1], 'W'],
-  ])('should move from position %s to position %s when facing %s', (currentPosition, expectedPosition, direction) => {
-    let rover = createRover(currentPosition[0], currentPosition[1], direction as Direction);
-    rover = moveRover(rover);
+    [1, 1, {x: 1, y: 2}, 'N'],
+    [1, 1, {x: 1, y: 0}, 'S'],
+    [2, 1, {x: 3, y: 1}, 'E'],
+    [2, 1, {x: 1, y: 1}, 'W'],
+  ])('should move from position %s to position %s when facing %s', (initialX, initialY, expectedPosition, direction) => {
+    let rover = createRover(initialX, initialY, direction as Direction);
+    rover = moveRover(rover, {x: 5, y: 5});
 
     expect(rover.position).toEqual(expectedPosition);
   });

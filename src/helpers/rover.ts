@@ -1,6 +1,6 @@
-import { Direction, Rover, RoverInstruction } from '../types';
+import { Direction, MarsGrid, Rover, RoverInstruction } from '../types';
 
-export const createRover = (x: number, y: number, direction: Direction): Rover => ({ direction, position: [x, y] });
+export const createRover = (x: number, y: number, direction: Direction): Rover => ({ direction, position: {x, y} });
 
 /**
  * Moves a rover forward one place, taking into account its heading (direction).
@@ -8,22 +8,21 @@ export const createRover = (x: number, y: number, direction: Direction): Rover =
  * @param rover The rover you want to move
  * @returns a new Rover object with updated co-ordinates
  */
-export const moveRover = (rover: Rover): Rover => {
-  const [newX, newY] = rover.position;
-  let newPosition: [number, number] = [0, 0];
+export const moveRover = (rover: Rover, grid: MarsGrid): Rover => {
+  const { position: newPosition } = rover;
 
   switch (rover.direction) {
     case 'N':
-      newPosition = [newX, newY + 1];
+      if (newPosition.y < grid.y) newPosition.y++;
       break;
     case 'S':
-      newPosition = [newX, newY - 1];
+      if (newPosition.y > 0) newPosition.y--;
       break;
     case 'E':
-      newPosition = [newX + 1, newY];
+      if (newPosition.x < grid.x) newPosition.x++;
       break;
     case 'W':
-      newPosition = [newX - 1, newY];
+      if (newPosition.x > 0) newPosition.x--;
       break;
   }
 
@@ -46,12 +45,10 @@ export const rotateRover = (rover: Rover, instruction: Omit<RoverInstruction, 'M
     newDirectionIndex = (directionIndex + 1) % directions.length;
   }
 
-  console.log(directionIndex);
-  console.log(newDirectionIndex);
-  
-  
   return {
     ...rover,
     direction: directions[newDirectionIndex],
   };
 };
+
+export const printRoverOutput = (rover: Rover) => `${rover.position.x} ${rover.position.y} ${rover.direction}`;
