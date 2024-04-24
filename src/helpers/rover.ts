@@ -1,6 +1,21 @@
 import { Direction, MarsGrid, Rover, RoverInstruction } from '../types';
 
-export const createRover = (x: number, y: number, direction: Direction): Rover => ({ direction, position: {x, y} });
+/**
+ *
+ * @param x The horizontal position of the rover
+ * @param y The vertical position of the rover on the grid
+ * @param direction The current heading of the rover, north, south, east, or west
+ * @returns
+ */
+export const createRover = (grid: MarsGrid, initialX: number, initialY: number, direction: Direction): Rover => {
+  return {
+    direction,
+    position: {
+      x: initialX <= grid.x ? initialX : grid.x,
+      y: initialY <= grid.y ? initialY : grid.y,
+    },
+  };
+};
 
 /**
  * Moves a rover forward one place, taking into account its heading (direction).
@@ -32,6 +47,13 @@ export const moveRover = (rover: Rover, grid: MarsGrid): Rover => {
   };
 };
 
+/**
+ * Rotates the rover left or right 90 degrees from its current heading
+ *
+ * @param rover The rover you want to rotate
+ * @param instruction A rotate instruction, either L or R
+ * @returns a new Rover with updated direction
+ */
 export const rotateRover = (rover: Rover, instruction: Omit<RoverInstruction, 'M'>): Rover => {
   const directions: Direction[] = ['N', 'E', 'S', 'W'];
   const directionIndex = directions.indexOf(rover.direction);

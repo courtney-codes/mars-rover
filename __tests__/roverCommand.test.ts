@@ -17,7 +17,7 @@ describe('executeRoverInstruction', () => {
       expectedRoverPosition,
       expectedRoverDirection
     ) => {
-      const rover = createRover(initialX, initialY, initialDirection as Direction);
+      const rover = createRover(initialGrid, initialX, initialY, initialDirection as Direction);
 
       const finalRover = executeRoverInstruction(initialGrid, rover, instructions as RoverInstruction[]);
       expect(finalRover.position).toEqual(expectedRoverPosition);

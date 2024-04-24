@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import { Container, RoverInput, Button } from './components/styles';
+import { useState } from 'react';
+import { parseInstructions } from './helpers/input';
+import { executeRoverInstruction } from './roverCommand';
+import { Rover } from './types';
+import { printRoverOutput } from './helpers/rover';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [roverInput, setRoverInput] = useState('');
+  const [rovers, setRovers] = useState<Rover[]>([]);
+
+  const executeInstructions = () => {
+    const parsedInput = parseInstructions(roverInput);
+    const completedRovers = parsedInput.rovers.map(({ rover, instructions }) =>
+      executeRoverInstruction(parsedInput.grid, rover, instructions)
+    );
+    setRovers(completedRovers);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+    <Container>
+      <h1>Mars Rover Challenge</h1>
+      <RoverInput value={roverInput} onChange={(e) => setRoverInput(e.target.value)} />
+      <Button onClick={executeInstructions}>Execute!</Button>
+      {rovers.map((rover, i) => (
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          Rover {i + 1} is at position {printRoverOutput(rover)}
         </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      ))}
+    </Container>
+  );
 }
 
-export default App
+export default App;
